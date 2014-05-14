@@ -1,0 +1,7 @@
+- Nach Edit Medium sollte ein Button kommen, hinter dem man die Titel eingeben kann.
+- Titeleingabe:
+  - Auflistung aller bisher existenten Titel mit Links für Edit und Delete
+  - am Ende eine Link für "Insert Titel"
+  
+- Umstellung auf Rich Faces, u.a. um Interpreten via AJAX schneller herauszufinden
+  (u.u. auch via ModalPanel)

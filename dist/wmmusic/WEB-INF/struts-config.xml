@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<struts-config>
+
+	 <data-sources>
+	 	<data-source key="wmmusic" type="org.apache.commons.dbcp.BasicDataSource">
+	 		<set-property property="autoCommit" value="true"/>
+	 		<set-property property="description" value="PostgreSQL Datasource Config"/>
+	 		<set-property property="driverClassName" value="org.postgresql.Driver"/>
+	 		<set-property property="maxCount" value="4"/>
+	 		<set-property property="minCount" value="1"/>
+	 		<set-property property="username" value="jmmusic"/>
+	 		<set-property property="password" value="jmmusic"/>
+	 		<set-property property="url" value="jdbc:postgresql://localhost:5432/jmmusic2"/>
+	 	</data-source>
+	 	
+	</data-sources>
+	
+	<global-exceptions>
+		<exception
+                key="wmmusic.error"
+                path="/error.jsp"
+                scope="request"
+                type="java.lang.Throwable" />
+	</global-exceptions>
+
+	<global-forwards type="org.apache.struts.action.ActionForward">
+		<forward name="error" path="/error.jsp"/>
+		<forward name="index" path="/index.jsp"/>
+    </global-forwards>
+
+	<form-beans type="org.apache.struts.action.ActionFormBean">
+    	<form-bean
+    		name="selectArtistForm"
+    		type="org.apache.struts.action.DynaActionForm">
+    		<form-property
+        		name="artistName"
+        		type="java.lang.String"
+        	/>
+        	<form-property
+        		name="exact"
+        		type="java.lang.String"
+        	/>
+		</form-bean>
+		
+		<form-bean name="editArtistForm"
+			type="de.christophlorenz.wmmusic.artist.bean.EditArtistBean">	
+		</form-bean>
+		
+		<form-bean
+    		name="selectMediumForm"
+    		type="org.apache.struts.action.DynaActionForm">
+    		<form-property
+        		name="type"
+        		type="java.lang.String"
+        	/>
+    		<form-property
+        		name="code"
+        		type="java.lang.String"
+        	/>
+    		<form-property
+        		name="artist"
+        		type="java.lang.String"
+        	/>
+        	<form-property
+        		name="title"
+        		type="java.lang.String"
+        	/>
+		</form-bean>
+		
+		<form-bean name="editMediumForm"
+			type="de.christophlorenz.wmmusic.medium.bean.EditMediumBean">
+		</form-bean>
+		
+		<form-bean
+    		name="selectSongForm"
+    		type="org.apache.struts.action.DynaActionForm">
+    		<form-property
+        		name="artist"
+        		type="java.lang.String"
+        	/>
+        	
+        	<form-property
+        		name="artistId"
+        		type="java.lang.String"
+        	/>
+        	
+        	<form-property
+        		name="title"
+        		type="java.lang.String"
+        	/>
+        	
+        	<form-property
+        		name="mediumId"
+        		type="java.lang.String"
+        	/>
+        	
+        	<form-property
+        		name="exact"
+        		type="java.lang.String"
+        	/>
+		</form-bean>
+		
+		<form-bean name="editSongAndRecordingForm"
+			type="de.christophlorenz.wmmusic.song.bean.EditSongAndRecordingBean">
+		</form-bean>
+		
+		<form-bean name="editRecordingForm"
+			type="de.christophlorenz.wmmusic.recording.bean.EditRecordingBean">
+		</form-bean>
+		
+		<form-bean name="editSongForm"
+			type="de.christophlorenz.wmmusic.song.bean.EditSongBean">
+		</form-bean>
+		
+    </form-beans>
+
+      <action-mappings>
+      		<action path="/getInventory"
+      				type="de.christophlorenz.wmmusic.tools.GetInventoryAction">
+      				<!-- forward name="success" path="/tools/inventory.jsp" /   -->
+      		</action>
+      
+            <action path="/test"
+                    type="de.christophlorenz.wmmusic.artist.CountArtistAction">
+             <forward name="success" path="/welcome.jsp" />
+            </action>
+      
+      		<action path="/selectArtist" 
+      			type="de.christophlorenz.wmmusic.artist.SelectArtistAction" 
+      			name="selectArtistForm"
+      			scope="request"
+      			input="/artist/selectArtist.jsp">
+      			<forward name="list" path="/artist/showArtistList.jsp" />
+      			<forward name="single" path="/artist/editArtist.jsp" />
+      		</action>
+      		
+      		<action path="/editArtist"
+      			type="de.christophlorenz.wmmusic.artist.EditArtistAction"
+      			name="editArtistForm"
+      			scope="request"
+      			input="/artist/editArtist.jsp">
+      		</action>
+      		
+      		<action path="/deleteArtist"
+      			type="de.christophlorenz.wmmusic.artist.DeleteArtistAction"
+      			name="editArtistForm"
+      			scope="request"
+      			input="/artist/editArtist.jsp">
+      		</action>
+      
+            <action path="/artist"
+                    type="de.christophlorenz.wmmusic.artist.CountArtistAction">
+             <forward name="success" path="/xx.jsp" />
+            </action>
+            
+            <action path="/selectMediumType"
+            		type="de.christophlorenz.wmmusic.medium.SelectMediumForm">
+            	<forward name="success" path="/medium/selectMedium.jsp"/>
+            </action>
+            
+            <action path="/selectMedium" 
+      			type="de.christophlorenz.wmmusic.medium.SelectMediumAction" 
+      			name="selectMediumForm"
+      			scope="request"
+      			input="/artist/selectMedium.jsp">
+      			<forward name="list" path="/medium/showMediumList.jsp" />
+      			<forward name="single" path="/medium/editMedium.jsp" />
+      		</action>
+      		
+      		<action path="/editMedium"
+      			type="de.christophlorenz.wmmusic.medium.EditMediumAction"
+      			name="editMediumForm"
+      			scope="request"
+      			input="/medium/editMedium.jsp">
+      			<forward name="success" path="/do/selectMedium"/>
+      		</action>
+      		
+      		<action path="/deleteMedium"
+      			type="de.christophlorenz.wmmusic.medium.DeleteMediumAction"
+      			name="editMediumForm"
+      			scope="request"
+      			input="/medium/editMedium.jsp">
+      		</action>
+      		
+      		<action path="/generateSticker"
+      			type="de.christophlorenz.wmmusic.medium.GenerateStickerAction"
+      			name="editMediumForm"
+      			scope="request"
+      			input="/medium/editMedium.jsp">
+      		</action>
+      		
+      		<action path="/printSticker"
+      			type="de.christophlorenz.wmmusic.medium.PrintStickerAction">
+      			<forward name="success" path="/medium/stickerList.jsp" />
+      		</action>
+      		
+      		<action path="/deleteStickerTags"
+      			type="de.christophlorenz.wmmusic.medium.DeleteStickerAction">
+      		</action>
+      		    		
+      		<action path="/selectRecordingsOnMedium"
+      			scope="request"
+      			name="editMediumForm"
+      			input="/medium/editMedium.jsp"
+      			type="de.christophlorenz.wmmusic.recording.SelectRecordingsOnMediumAction">
+      			<forward name="success" path="/recording/showRecordingList.jsp" />
+      		</action>
+      		
+      		<action path="/selectSongForm"
+      			scope="request"
+      			type="de.christophlorenz.wmmusic.song.SelectSongFormAction">
+      			<forward name="success" path="/song/selectSong.jsp"/>
+      		</action>
+      		      		
+      		<action path="/addRecordingToMedium"
+      			scope="request"
+      			name="selectSongForm"
+      			type="de.christophlorenz.wmmusic.song.SelectSongFormAction">
+      			<forward name="ARTM" path="/song/selectSong.jsp" />
+            </action>
+            
+            <action path="/selectSong" 
+      			type="de.christophlorenz.wmmusic.song.SelectSongsAction" 
+      			name="selectSongForm"
+      			scope="request"
+      			input="/song/selectSong.jsp">
+      			<forward name="insertSongAndRecording" path="/song/editSongAndRecording.jsp"/>
+      			<forward name="insertRecording" path="/recording/editRecording.jsp"/>
+      			<forward name="songList" path="/song/showSongList.jsp"/>
+      			<forward name="editSong" path="/song/editSong.jsp"/>
+      			<forward name="editSongAndListRecordings" path="/recording/editSongListRecordings.jsp"/>
+      		</action>
+      		
+      		<action path="/editSong"
+      			type="de.christophlorenz.wmmusic.song.EditSongAction"
+      			name="editSongForm"
+      			scope="request"
+      			input="/song/editSong.jsp">
+      			<forward name="success" path="/song/selectSong.jsp"/>
+      			<forward name="ARTM" path="/do/selectRecordingsOnMedium" />
+      			<forward name="SONG" path="/do/selectSong" />
+      		</action>
+      		
+      		<action path="/editSongAndRecording"
+      			type="de.christophlorenz.wmmusic.song.EditSongAndRecordingAction"
+      			name="editSongAndRecordingForm"
+      			scope="request"
+      			input="/song/editSongAndRecording.jsp">
+      			<forward name="ARTM" path="/do/selectRecordingsOnMedium" />
+      		</action>
+      		
+      		<action path="/editRecording"
+      			type="de.christophlorenz.wmmusic.recording.EditRecordingAction"
+      			name="editRecordingForm"
+      			scope="request"
+      			input="/recording/editRecording.jsp">
+      			<forward name="ARTM" path="/do/selectRecordingsOnMedium" />
+      			<forward name="SONG" path="/do/selectRecordingsOnMedium" />
+      			<forward name="success" path="/do/selectRecordingsOnMedium"/>
+      		</action>
+      		
+      		<action path="/selectRecording"
+      			type="de.christophlorenz.wmmusic.recording.SelectRecordingAction">
+      			<forward name="success" path="/recording/editRecording.jsp" />
+      		</action>
+      		
+      		<action path="/statistics"
+      			type="de.christophlorenz.wmmusic.statistics.StatisticsAction">
+      			<forward name="success" path="/statistics/statistics.jsp" />
+      		</action>
+      		
+	</action-mappings>
+      
+       <message-resources parameter="MessageResources" />
+       
+</struts-config>
+

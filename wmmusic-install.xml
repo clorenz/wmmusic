@@ -1,0 +1,49 @@
+<installation version="1.0">
+	<info>
+		<appname>wmmusic</appname>
+		<appversion>0.1</appversion>
+		<authors>
+			<author name="Christoph Lorenz" email="wmmusic@christophlorenz.de"/>
+		</authors>
+		<javaversion>1.4</javaversion>
+		<url>http://wmmusic.sourceforge.net/</url>
+	</info>
+	
+	<guiprefs height="600" resizable="yes" width="800">
+		<laf name="metouia">
+			<os family="unix"/>
+		</laf>
+		<laf name="looks">
+      		<os family="windows" />
+      		<param name="variant" value="extwin" />
+     	</laf>
+	</guiprefs>
+	
+	<resources>
+		<res id="InfoPanel.info" src="TODO"/>
+	</resources>
+	
+	<locale>
+		<langpack iso3="eng"/>
+		<langpack iso3="deu"/>
+	</locale>
+	
+	<panels>
+		<panel classname="HelloPanel"/>
+        <panel classname="InfoPanel"/>
+        <panel classname="LicencePanel"/>
+        <panel classname="TargetPanel"/> 
+        <panel classname="PacksPanel"/>
+        <panel classname="InstallPanel"/>
+        <panel classname="SimpleFinishPanel"/>		
+	</panels>
+	
+	<packs>
+		<pack name="webapp" required="yes">
+			<description>The webapp</description>
+			<fileset dir="" targetdir="$INSTALL_PATH">
+				<include name="WebRot/**/*" />
+			</fileset>
+		</pack>
+	</packs>
+</installation>

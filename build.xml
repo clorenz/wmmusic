@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<project name="wmmusic" default="dist" basedir=".">
+
+	<!-- <property name="izpack.dir" location="${user.home}/IzPack"/> -->
+	<property name="bin.dir" location="bin" />
+	<property name="build.lib.dir" location="/usr/share/java" />
+	<property name="dist.dir" location="dist" />
+	<property name="src.dir" location="src" />
+	<property name="webroot.dir" location="WebRoot" />
+	<property name="lib.dir" location="${webroot.dir}/WEB-INF/lib" />
+	<property name="tomcat.lib.dir" location="/opt/apache-tomcat-6.0.26/lib" />
+
+	<!--
+	<taskdef name="izpack" classpath="${izpack.dir}/lib/compiler.jar"
+  		classname="com.izforge.izpack.ant.IzPackTask" />
+  	-->
+  		
+	<target name="clean">
+		<delete dir="${bin.dir}"/>
+		<mkdir dir="${bin.dir}"/>
+		<delete dir="${dist.dir}"/>
+		<mkdir dir="${dist.dir}"/>
+	</target>
+  		
+
+	<target name="build">
+		<javac srcdir="${src.dir}" destdir="${bin.dir}" debug="on" optimize="off" deprecation="off" classpath="${tomcat.lib.dir}/servlet-api.jar;${lib.dir}/struts.jar;${lib.dir}/commons-dbcp-1.2.1.jar;${lib.dir}/log4j-1.2.8.jar;${lib.dir}/json-lib-2.3-jdk15.jar;${lib.dir}/commons-lang-2.4.jar;${lib.dir}/commons-collections3-3.2.1.jar"/>
+	</target>
+	
+	<target name="version">
+		 <!-- exec executable="./scripts/extractVersion.sh"  -->
+		 <property file="version.properties"/>
+		 <echo>Calculated version ${program.version}</echo>
+	</target>
+		
+  	<target name="dist" depends="clean,build,version">
+		<delete dir="${dist.dir}"/>
+  		<mkdir dir="${dist.dir}"/>	
+  		<jar destfile="${dist.dir}/${ant.project.name}.jar" update="true">
+  			<fileset dir="${bin.dir}"/>
+  		</jar>
+  		<delete dir="${dist.dir}/${ant.project.name}"/>
+  		<copy todir="${dist.dir}/${ant.project.name}">
+  			<fileset dir="${webroot.dir}"/>
+  		</copy>
+  		<copy file="${dist.dir}/${ant.project.name}.jar" todir="${dist.dir}/${ant.project.name}/WEB-INF/lib"/>
+  		<war destfile="${dist.dir}/${ant.project.name}.war" webxml="${webroot.dir}/WEB-INF/web.xml">
+  			<fileset dir="${dist.dir}/${ant.project.name}">
+  				<exclude name="WEB-INF/classes/**"/>
+  			</fileset>
+		</war>
+		<tar destfile="${dist.dir}/${ant.project.name}-${program.version}.tar">
+			<tarfileset dir="build/lib" prefix="build/lib" preserveLeadingSlashes="false">
+    			<exclude name="CVS/**"/>
+    		</tarfileset>
+    		<fileset dir=".">
+    			<include name="build.xml"/>
+    			<include name=".project"/>
+    			<include name=".classpath"/>
+    			<include name="TODO"/>
+    			<include name="version.properties"/>
+    			<include name="wmmusic.xml"/>
+    		</fileset>
+    		<tarfileset dir="doc" prefix="doc" preserveLeadingSlashes="false">
+    			<exclude name="CVS/**"/>
+    		</tarfileset>
+    		<tarfileset dir="scripts" prefix="scripts" preserveLeadingSlashes="false">
+    			<exclude name="CVS/**"/>
+    		</tarfileset>
+    		<tarfileset dir="src" prefix="src" preserveLeadingSlashes="false">
+    			<exclude name="CVS/**"/>
+    		</tarfileset>
+    		<tarfileset dir="WebRoot" prefix="WebRoot" preserveLeadingSlashes="false">
+    			<exclude name="CVS/**"/>
+    			<exclude name="WEB-INF/classes/**"/>
+    		</tarfileset>
+    	</tar>
+    	<gzip destfile="${dist.dir}/${ant.project.name}-${program.version}.tar.gz" src="${dist.dir}/${ant.project.name}-${program.version}.tar"/>
+  	</target>
+  	
+
+	<target name="build.web" depends="build,version"/>
+		
+  		
+  	<target name="izdist" depends="dist">
+  		<!-- Generate izpack installer file -->
+    	<izpack input="wmmusic-install.xml"
+    		output="${dist.dir}/wmmusic-install-${program.version}.jar"
+    		installerType="standard" basedir="."
+    		izPackDir="${izpack.dir}/" />
+  </target>
+</project>

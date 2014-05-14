@@ -1,0 +1,8 @@
+#!/bin/bash
+
+cd ..
+
+LIB_PATH=lib
+CP=classes:build/classes:build`find $LIB_PATH -name '*.jar*' -printf :%p`
+
+java -cp $CP de.christophlorenz.wmmusic.tools.DBConverter $*
