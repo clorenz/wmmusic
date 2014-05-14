@@ -3,4 +3,4 @@ wmmusic
 
 Music inventory management system
 
-See: http://www.christophlorenz.localhost/prog/wmmusic.php
+See: http://www.christophlorenz.de/prog/wmmusic.php
