@@ -1,4 +1,5 @@
 /bin
 /dist
 /build
-.gradle
+/.gradle
+/WebRoot/WEB-INF/classes
