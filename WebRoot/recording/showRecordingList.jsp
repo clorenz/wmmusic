@@ -17,6 +17,7 @@
   	<th>Pos.</th>
   	<th>Artist</th>
   	<th>Song</th>
+  	<th>Authors</th>
   	<th>Time</th>
   </tr>
   
@@ -41,11 +42,12 @@
   	</td>
   	<td><bean:write name="song" property="artist"/> </td>
   	<td><bean:write name="song" property="title"/> </td>
+  	<td><small><bean:write name="song" property="authors"/> </td>
   	<td><bean:write name="song" property="rawTime"/> </td>
   </tr>
   </logic:iterate>
   <form name="addnewsong">
-  <tr class="form"><td colspan="5" align="right">
+  <tr class="form"><td colspan="6" align="right">
 	<a href="/wmmusic/do/addRecordingToMedium?path=ARTM&artistId=<bean:write name="medium" property="artistId"/>&mediumId=<bean:write name="medium" property="id"/>"><html:button value="Add new song" property="" styleId="addnewsong"/></a>
   </td></tr>
   </form>

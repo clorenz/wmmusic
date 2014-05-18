@@ -48,6 +48,7 @@ public class Recording {
 	private String digital=null;
 	private String mediumArtist=null;
 	private String mediumTitle=null;
+	private String authors=null;
 
 	/**
 	 * @return Returns the mediumArtist.
@@ -421,5 +422,20 @@ public class Recording {
 		return ret;
 	}
 
+	/**
+	 * @return the authors
+	 */
+	public String getAuthors() {
+		return authors;
+	}
+
+	/**
+	 * @param authors the authors to set
+	 */
+	public void setAuthors(String authors) {
+		this.authors = authors;
+	}
+
+	
 	
 }

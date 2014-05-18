@@ -1,7 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'war'
 
-// version='0.7'
+// version='0.71'
 tomcat_home='/opt/apache-tomcat-6.0.26'
 
 repositories {

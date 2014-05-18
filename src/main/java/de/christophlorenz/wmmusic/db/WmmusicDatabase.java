@@ -74,7 +74,7 @@ public class WmmusicDatabase implements IWmmusicDatabase {
 	private static final String INSERT_SONG="INSERT INTO song (artist_id,title,release,year,authors,dance,id3genre,remarks,timestamp) VALUES (?,?,?,?,?,?,?,?,now())";
 	private static final String UPDATE_SONG="UPDATE song SET artist_id=?,title=?,release=?,year=?,authors=?,dance=?,id3genre=?,remarks=?,timestamp=now() WHERE id=?";
 	
-	private static final String SELECT_RECORDINGS_FROM_MEDIUM="SELECT a.id as artist_id, a.name as artist_name, s.id as song_id, s.title as song_title, m.type as medium_type, m.code as medium_code, r.* from recording r, song s, artist a, medium m where r.medium_id=? and r.song_id=s.id and s.artist_id=a.id and r.medium_id=m.id ORDER BY r.side,r.track,r.counter";
+	private static final String SELECT_RECORDINGS_FROM_MEDIUM="SELECT a.id as artist_id, a.name as artist_name, s.id as song_id, s.title as song_title, s.authors as song_authors, m.type as medium_type, m.code as medium_code, r.* from recording r, song s, artist a, medium m where r.medium_id=? and r.song_id=s.id and s.artist_id=a.id and r.medium_id=m.id ORDER BY r.side,r.track,r.counter";
 	private static final String SELECT_RECORDINGS_FOR_SONG="SELECT a.id as artist_id, a.name as artist_name, s.id as song_id, s.title as song_title, m.type as medium_type, m.code as medium_code, r.* from recording r, song s, artist a, medium m where s.id=? and r.song_id=s.id and s.artist_id=a.id and r.medium_id=m.id ORDER BY r.side,r.track,r.counter";	
 	private static final String SELECT_MAX_SIDE_FROM_MEDIUM="SELECT max(side) FROM recording WHERE medium_id=?";
 	private static final String SELECT_MAX_TRACK_FROM_MEDIUM="SELECT max(track) FROM recording WHERE medium_id=?";
@@ -425,7 +425,7 @@ public class WmmusicDatabase implements IWmmusicDatabase {
 			while ( rs.next()) {
 				Medium m = new Medium(rs.getLong("id"));
 				m.setArtistId(rs.getLong("artist_id"));
-				m.setAudio(rs.getInt("audio"));
+				m.setAudio(rs.getBoolean("audio")?1:0);
 				m.setBurningDate(rs.getString("burning_date"));
 				try {
 					m.setBuyDate(rs.getString("buy_date"));
@@ -528,7 +528,7 @@ public class WmmusicDatabase implements IWmmusicDatabase {
 					Medium m = new Medium(rs.getLong("id"));
 					m.setArtistId(rs.getLong("artist_id"));
 					m.setArtist(rs.getString("artist_name"));
-					m.setAudio(rs.getInt("audio"));
+					m.setAudio(rs.getBoolean("audio")?1:0);
 					m.setBurningDate(rs.getString("burning_date"));
 					try {
 						m.setBuyDate(rs.getString("buy_date"));
@@ -586,7 +586,7 @@ public class WmmusicDatabase implements IWmmusicDatabase {
 				if (rs.wasNull())
 					m.setArtistId(-1);				
 				m.setArtist(rs.getString("artist_name"));
-				m.setAudio(rs.getInt("audio"));
+				m.setAudio(rs.getBoolean("audio")?1:0);
 				if ( rs.wasNull())
 					m.setAudio(-1);
 				m.setBurningDate(rs.getString("burning_date"));
@@ -737,7 +737,7 @@ public class WmmusicDatabase implements IWmmusicDatabase {
 			stmt.setString(17, m.getCategory());
 			stmt.setString(18, m.getId3Genre());
 			stmt.setString(19, m.getDigital());
-			DBHelper.stmtNullOrBoolean(stmt,20,m.getAudio());
+			stmt.setBoolean(20,m.getAudio()>0?true:false);
 			DBHelper.stmtNullOrBoolean(stmt,21,m.getRewritable());
 			stmt.setString(22, m.getMagic());
 			stmt.setString(23, m.getFilesType());
@@ -818,7 +818,8 @@ public class WmmusicDatabase implements IWmmusicDatabase {
 				Recording r = new Recording(rs.getLong("id"));
 				r.setArtist(rs.getString("artist_name"));
 				r.setArtistId(rs.getLong("artist_id"));
-				r.setCounter(rs.getString("counter"));
+				r.setAuthors(rs.getString("song_authors"));
+				r.setCounter(rs.getString("counter"));;
 				r.setDigital(rs.getString("digital"));
 				r.setLongplay(rs.getString("longplay"));
 				r.setMediumCode(rs.getString("medium_code"));
