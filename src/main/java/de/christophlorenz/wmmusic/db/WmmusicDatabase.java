@@ -29,6 +29,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +46,7 @@ import de.christophlorenz.wmmusic.statistics.bean.StatisticsBean;
 public class WmmusicDatabase implements IWmmusicDatabase {
 	
 	private static final Logger log;
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 	private DataSource ds;
 	
 	private static final String SELECT_ARTIST_NAME_EXACT="SELECT * FROM artist WHERE name = ?";
@@ -313,7 +315,7 @@ public class WmmusicDatabase implements IWmmusicDatabase {
 			stmt = con.prepareStatement(INSERT_ARTIST);
 			stmt.setString(1, artist.getName());
 			stmt.setString(2, artist.getPrint());
-			stmt.setString(3, artist.getBirthday().length()>0?artist.getBirthday():null);
+			stmt.setDate(3, artist.getBirthday().length()>0?new java.sql.Date(dateFormat.parse(artist.getBirthday()).getTime()):null);
 			stmt.setString(4, artist.getCountry());
 			stmt.setString(5, artist.getLocation());
 			stmt.setString(6, artist.getUrl());
@@ -335,6 +337,9 @@ public class WmmusicDatabase implements IWmmusicDatabase {
 				return -1;
 			}
 		} catch (SQLException e) {
+			log.error(e,e);
+			throw new DAOException(e);
+		} catch ( Exception e) {
 			log.error(e,e);
 			throw new DAOException(e);
 		} finally {
