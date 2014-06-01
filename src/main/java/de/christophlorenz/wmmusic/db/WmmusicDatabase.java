@@ -76,7 +76,7 @@ public class WmmusicDatabase implements IWmmusicDatabase {
 	private static final String INSERT_SONG="INSERT INTO song (artist_id,title,release,year,authors,dance,id3genre,remarks,timestamp) VALUES (?,?,?,?,?,?,?,?,now())";
 	private static final String UPDATE_SONG="UPDATE song SET artist_id=?,title=?,release=?,year=?,authors=?,dance=?,id3genre=?,remarks=?,timestamp=now() WHERE id=?";
 	
-	private static final String SELECT_RECORDINGS_FROM_MEDIUM="SELECT a.id as artist_id, a.name as artist_name, s.id as song_id, s.title as song_title, s.authors as song_authors, m.type as medium_type, m.code as medium_code, r.* from recording r, song s, artist a, medium m where r.medium_id=? and r.song_id=s.id and s.artist_id=a.id and r.medium_id=m.id ORDER BY r.side,r.track,r.counter";
+	private static final String SELECT_RECORDINGS_FROM_MEDIUM="SELECT a.id as artist_id, a.name as artist_name, s.id as song_id, s.title as song_title, s.authors as song_authors, s.year as song_year, m.type as medium_type, m.code as medium_code, r.* from recording r, song s, artist a, medium m where r.medium_id=? and r.song_id=s.id and s.artist_id=a.id and r.medium_id=m.id ORDER BY r.side,r.track,r.counter";
 	private static final String SELECT_RECORDINGS_FOR_SONG="SELECT a.id as artist_id, a.name as artist_name, s.id as song_id, s.title as song_title, m.type as medium_type, m.code as medium_code, r.* from recording r, song s, artist a, medium m where s.id=? and r.song_id=s.id and s.artist_id=a.id and r.medium_id=m.id ORDER BY r.side,r.track,r.counter";	
 	private static final String SELECT_MAX_SIDE_FROM_MEDIUM="SELECT max(side) FROM recording WHERE medium_id=?";
 	private static final String SELECT_MAX_TRACK_FROM_MEDIUM="SELECT max(track) FROM recording WHERE medium_id=?";

@@ -1,4 +1,4 @@
-<h1>wmmusic 0.72</h1>
+<h1>wmmusic 0.73</h1>
 <table border=0 cellpadding="2" cellspacing="0">
 <tr>
 	<td>&nbsp;<a href="/wmmusic/do/selectMediumType?type=0"><img src="/wmmusic/img/audio_tape.png" border="0" width="40"></a>&nbsp;</td>
