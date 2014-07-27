@@ -29,8 +29,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -47,6 +49,7 @@ public class WmmusicDatabase implements IWmmusicDatabase {
 	
 	private static final Logger log;
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+	private static final SimpleDateFormat usDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	private DataSource ds;
 	
 	private static final String SELECT_ARTIST_NAME_EXACT="SELECT * FROM artist WHERE name = ?";
@@ -282,9 +285,10 @@ public class WmmusicDatabase implements IWmmusicDatabase {
 			stmt = con.prepareStatement(UPDATE_ARTIST);
 			stmt.setString(1, artist.getName());
 			stmt.setString(2, artist.getPrint());
-			if ( artist.getBirthday()!=null && artist.getBirthday().length()>0 )
-				stmt.setString(3, artist.getBirthday());
-			else
+			if ( artist.getBirthday()!=null && artist.getBirthday().length()>0 && !artist.getBirthday().startsWith("0001")) {
+				Date birthday = usDateFormat.parse(artist.getBirthday());
+				stmt.setDate(3, new java.sql.Date(birthday.getTime()));
+			} else
 				stmt.setNull(3, Types.DATE);
 			stmt.setString(4, artist.getCountry());
 			stmt.setString(5, artist.getLocation());
@@ -296,6 +300,9 @@ public class WmmusicDatabase implements IWmmusicDatabase {
 			
 			return ( rowCount == 1);
 		} catch (SQLException e) {
+			logError(e, UPDATE_ARTIST);
+			throw new DAOException(e);
+		} catch (ParseException e) {
 			logError(e, UPDATE_ARTIST);
 			throw new DAOException(e);
 		} finally {
@@ -1688,7 +1695,7 @@ public class WmmusicDatabase implements IWmmusicDatabase {
 	
 	
 	
-	private void logError(SQLException e, String statement) {
+	private void logError(Exception e, String statement) {
 		log.error(e.getMessage()+" on "+statement+": ",e);
 	}
 

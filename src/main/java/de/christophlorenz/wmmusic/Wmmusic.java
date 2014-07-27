@@ -27,6 +27,6 @@ package de.christophlorenz.wmmusic;
 public class Wmmusic {
 	
 	// Yes, that's really all for now :)
-	public static final String PROGRAM_VERSION="0.6";
+	public static final String PROGRAM_VERSION="0.75";
 
 }
